@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="well">
+            Posts by tag: <div class="label label-success">{{ tag.name }}</div>
+        </div>
+    </div>
+    <div class="row marketing">
+        {% for row in posts|batch(2) %}
+            <div class="row">
+                {% for post in row %}
+                    {% include 'AcmeMainBundle:Blog:partial/postShort.html.twig' with {'post' : post} %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <em>No posts found</em>
+        {% endfor %}
+    </div>
+{% endblock %}

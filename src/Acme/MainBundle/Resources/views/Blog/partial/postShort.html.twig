@@ -1,0 +1,13 @@
+<div class="col-lg-6">
+    <h4>{{ post.title }}</h4>
+    <p>{{ post.shortText }}..</p>
+    <p>
+        <strong>Tags:</strong>
+        {% for tag in post.tags %}
+            <a class="label label-info" href="{{ path('view_tag', {'id': tag.id }) }}">{{ tag.name }}</a>
+        {% else %}
+
+        {% endfor %}
+    </p>
+    <p><a href="{{ path('view_post', {'id': post.id }) }}" class="btn btn-default btn-sm">Read More</a></p>
+</div>

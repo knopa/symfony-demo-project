@@ -1,0 +1,30 @@
+Acme\MainBundle\Entity\User:
+    type:  entity
+    table: users
+    repositoryClass: Acme\MainBundle\Entity\UserRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        username:
+            type: string
+            length: 100
+        password:
+            type: string
+            length: 100
+        name:
+            type: string
+            length: 255
+        updated:
+            type: datetime
+            nullable: TRUE
+        created:
+            type: datetime
+    oneToMany:
+        posts:
+            targetEntity: Acme\MainBundle\Entity\Post
+            mappedBy: author
+    lifecycleCallbacks:
+        prePersist: [setCreatedValue]
+        preUpdate:  [setUpdatedValue]

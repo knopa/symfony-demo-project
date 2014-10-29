@@ -3,5 +3,9 @@ homepage:
     defaults: { _controller: AcmeMainBundle:Blog:index }
 
 view_post:
-    path:     /post
+    path:     /post/{id}
     defaults: { _controller: AcmeMainBundle:Blog:show }
+
+view_tag:
+    path:     /tag/{id}
+    defaults: { _controller: AcmeMainBundle:Blog:tag }

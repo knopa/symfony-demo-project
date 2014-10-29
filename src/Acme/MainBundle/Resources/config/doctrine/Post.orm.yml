@@ -1,0 +1,41 @@
+Acme\MainBundle\Entity\Post:
+    type:  entity
+    table: posts
+    repositoryClass: Acme\MainBundle\Entity\PostRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        title:
+            type: string
+            length: 100
+        shortText:
+            type: string
+            length: 255
+        text:
+            type: text
+        updated:
+            type: datetime
+            nullable: TRUE
+        created:
+            type: datetime
+    oneToMany:
+        comments:
+            targetEntity: Acme\MainBundle\Entity\Comment
+            mappedBy: post
+    manyToOne:
+        author:
+            targetEntity: Acme\MainBundle\Entity\User
+            inversedBy: posts
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+                onDelete: CASCADE
+    manyToMany:
+        tags:
+            targetEntity: Acme\MainBundle\Entity\Tag
+            inversedBy: posts
+    lifecycleCallbacks:
+        prePersist: [setCreatedValue]
+        preUpdate:  [setUpdatedValue]

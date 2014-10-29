@@ -47,3 +47,8 @@ PHP 5.5.
 If there are any tests you feel should be implemented then feel free to do so.
 
 An administrative area will **not** be necessary.
+
+Deploy
+-----
+./install.sh
+php app/console server:run

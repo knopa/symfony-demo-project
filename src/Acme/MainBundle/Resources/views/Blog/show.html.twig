@@ -3,23 +3,30 @@
 {% block body %}
     <div class="row">
         <div class="col-sm-12 well">
-            <h1>Blog Post 2 <small>By Author Name</small></h1>
+            <h1>{{post.title}} <small>By {{post.author.name}}</small></h1>
             <p>
                 <strong>Updated:</strong>
-                11:09 Sat 3<sup>rd</sup> Sep 2014
+                {{ post.updated|date("h:i M j") }}<sup>{{ post.updated|date("S") }}</sup> {{ post.updated|date("Y") }}
             </p>
             <p>
                 <strong>Tagged:</strong>
-                <a href="#">Tag 1</a>, <a href="#">Tag 2</a>
+                {% for tag in post.tags %}
+                    <a class="label label-info" href="{{ path('view_tag', {'id': tag.id }) }}">{{ tag.name }}</a>
+                {% else %}
+                    No tags
+                {% endfor %}
             </p>
-            <p>Literally mixtape master cleanse, drinking vinegar blog Blue Bottle artisan eu occaecat meggings accusamus bicycle rights consectetur. Tousled semiotics placeat pickled meh shabby chic, mollit veniam banh mi. Forage velit sapiente mumblecore, est YOLO pug fashion axe id raw denim. Esse kogi assumenda stumptown, sint Intelligentsia Echo Park 8-bit magna officia. Leggings chillwave whatever sapiente, est accusamus in Schlitz vero vegan literally roof party eu commodo. Nulla shabby chic irony, XOXO Intelligentsia esse lomo. McSweeney's distillery tattooed, Etsy irure quinoa disrupt.</p>
-            <p>Literally mixtape master cleanse, drinking vinegar blog Blue Bottle artisan eu occaecat meggings accusamus bicycle rights consectetur. Tousled semiotics placeat pickled meh shabby chic, mollit veniam banh mi. Forage velit sapiente mumblecore, est YOLO pug fashion axe id raw denim. Esse kogi assumenda stumptown, sint Intelligentsia Echo Park 8-bit magna officia. Leggings chillwave whatever sapiente, est accusamus in Schlitz vero vegan literally roof party eu commodo. Nulla shabby chic irony, XOXO Intelligentsia esse lomo. McSweeney's distillery tattooed, Etsy irure quinoa disrupt.</p>
+            <p>{{ post.text }}</p>
         </div>
 
         <div class="col-sm-12">
             <ul class="pager">
-                <li class="previous"><a href="#">&larr; Older</a></li>
-                <li class="next"><a href="#">Newer &rarr;</a></li>
+                {% if(older) %}
+                <li class="previous"><a href="{{ path('view_post', {'id': older.id }) }}">&larr; Older</a></li>
+                {%  endif %}
+                {% if(newer) %}
+                <li class="next"><a href="{{ path('view_post', {'id': newer.id }) }}">Newer &rarr;</a></li>
+                {% endif %}
             </ul>
         </div>
 
@@ -27,33 +34,45 @@
             <h2>Comments</h2>
 
             <ul class="list-unstyled">
+                {% for comment in post.comments %}
                 <li>
+                    <div class="well">
+                        <p><strong>{{ comment.name }}</strong></p>
+                        <p>{{ comment.text }}</p>
+                        <span class="pull-right">{{ comment.created|date("H:i M j") }}<sup>{{ comment.created|date("S") }}</sup> {{ comment.created|date("Y") }}</span>
+                    </div>
+                {% else %}
                     <div class="alert alert-info">No comments have been posted yet.</div>
                 </li>
+                {% endfor %}
             </ul>
 
             <hr>
 
             <h3>Add comment</h3>
-            <form class="form-horizontal" role="form">
+            <form id="comment-form" action="{{ path('view_post', {'id' : post.id}) }}" class="form-horizontal" role="form" method="post" {{ form_enctype(form) }}>
+                {{ form_row (form._token) }}
+                <div class="form-group">
+                    {{ form_errors(form) }}
+                </div>
                 <div class="form-group">
                     <label for="inputName3" class="col-sm-2 control-label">Name <span class="text-danger">*</span></label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputName3" placeholder="Name">
+                        <input type="text" class="form-control" id="inputName3" placeholder="Name" required="required" name="{{ form.name.vars.full_name }}">
                         <span class="help-block">Your full name.</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Email <span class="text-danger">*</span></label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email" required="required" name="{{ form.email.vars.full_name }}">
                         <span class="help-block">Must be a valid email address. Will <strong>not be displayed</strong> publicly.</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="comment" class="col-sm-2 control-label">Comment <span class="text-danger">*</span></label>
                     <div class="col-sm-10">
-                        <textarea name="comment" id="comment" class="form-control" rows="8" cols="40" placeholder="Comment..."></textarea>
+                        <textarea  name="{{ form.text.vars.full_name }}" id="comment" title="10 characters minimum" class="form-control" rows="8" cols="40" placeholder="Comment..." required="required"></textarea>
                         <span class="help-block">HTML <em>will not be rendered</em> in your comment. Minimum 10 characters.</span>
                     </div>
                 </div>
@@ -70,4 +89,10 @@
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js" ></script>
+    <script type="text/javascript" src="{{ asset('/bundles/acmemain/js/validation.js') }}"></script>
 {% endblock %}

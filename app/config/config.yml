@@ -73,3 +73,24 @@ swiftmailer:
 
 doctrine_migrations:
     namespace: Acme\MainBundle\Migrations
+
+
+bazinga_faker:
+    orm: doctrine
+    locale: en_US
+    entities:
+        Acme\MainBundle\Entity\User:
+            number: 5
+            custom_formatters:
+                name: { method: word }
+        Acme\MainBundle\Entity\Post:
+            number: 10
+        Acme\MainBundle\Entity\Tag:
+            number: 20
+            custom_formatters:
+                name: { method: word }
+        Acme\MainBundle\Entity\Comment:
+            number: 20
+            custom_formatters:
+                name: { method: word }
+                email: { method: lexify, parameters: [ '?????@gmail.com' ]}
